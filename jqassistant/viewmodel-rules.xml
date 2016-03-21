@@ -1,0 +1,69 @@
+<jqa:jqassistant-rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xmlns:jqa="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0"
+                       xsi:schemaLocation="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0 ">
+
+    <concept id="viewModel:ViewModelClass">
+        <description>Labels all classes implementing the ViewModel interface as "ViewModel".</description>
+        <cypher><![CDATA[
+            MATCH
+                (viewModelClass:Type:Class)-[:IMPLEMENTS]->(viewModelType:Type)
+            WHERE
+                viewModelType.fqn = "de.saxsys.mvvmfx.ViewModel"
+            SET
+                viewModelClass:ViewModel
+            RETURN
+                viewModelClass
+        ]]></cypher>
+    </concept>
+
+    <constraint id="viewModel:ClassNameMustHaveViewSuffix">
+        <requiresConcept refId="viewModel:ViewModelClass"/>
+        <description>All ViewModel implementations must have a name suffix "ViewModel".</description>
+        <cypher><![CDATA[
+            MATCH
+                (viewModelClass:Class:ViewModel)
+            WHERE
+                NOT viewModelClass.name =~ ".*ViewModel"
+            RETURN
+                viewModelClass AS ViewModelClass
+        ]]></cypher>
+    </constraint>
+
+    <constraint id="viewModel:ClassesMustBeLocatedInViewsPackage">
+        <requiresConcept refId="viewModel:ViewModelClass"/>
+        <description>All ViewModel implementations must be located in the package "views".</description>
+        <cypher><![CDATA[
+            MATCH
+                (package:Package)-[:CONTAINS]->(viewModelClass:Class:ViewModel)
+            WHERE
+                NOT package.name = "views"
+            RETURN
+                viewModelClass AS ViewModelClass, package AS InvalidPackage
+        ]]></cypher>
+    </constraint>
+
+
+    <constraint id="viewModel:ClassesMustNotHaveAccessToViews">
+        <requiresConcept refId="viewModel:ViewModelClass"/>
+        <description>Any ViewModel Class should not have access to any View method or instance</description>
+        <cypher><![CDATA[
+            MATCH
+	            (viewModelClass:Type:ViewModel),
+	            (viewClass:Type:Class)-[:IMPLEMENTS]->(viewType:Type),
+	            (vm:Type:ViewModel)-[:DEPENDS_ON]->(v:Type:View)
+            WHERE
+	            viewType.fqn = "de.saxsys.mvvmfx.FxmlView"
+            SET
+	            viewClass:View
+            RETURN
+	            DISTINCT vm AS InvalidViewModel, v AS DependantView
+        ]]>
+        </cypher>
+    </constraint>
+
+    <group id="viewModel-rules">
+        <includeConstraint refId="viewModel:ClassesMustNotHaveAccessToViews"/>
+        <includeConstraint refId="viewModel:ClassesMustBeLocatedInViewsPackage"/>
+    </group>
+
+</jqa:jqassistant-rules>

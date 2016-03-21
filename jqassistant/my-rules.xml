@@ -1,0 +1,39 @@
+<jqa:jqassistant-rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xmlns:jqa="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0"
+                       xsi:schemaLocation="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0 ">
+
+    <constraint id="my-rules:TestClassName">
+        <requiresConcept refId="junit4:TestClass"/>
+        <description>All JUnit test classes must have a name with suffix "Test".</description>
+        <cypher><![CDATA[
+            MATCH
+                (t:Junit4:Test:Class)
+            WHERE NOT
+                t.name =~ ".*Test"
+            RETURN
+                t AS InvalidTestClass
+        ]]></cypher>
+    </constraint>
+
+    <constraint id="example:ConstructorOfDateMustNotBeUsed">
+        <description>Constructors of java.util.Date must not be used.</description>
+        <cypher><![CDATA[
+            MATCH
+                (dateType:Type)-[:DECLARES]->(forbiddenMethod:Method),
+                (type:Type)-[:DECLARES]->(method:Method)-[:INVOKES]->(forbiddenMethod)
+            WHERE
+                dateType.fqn = 'java.util.Date'
+                AND forbiddenMethod:Constructor
+            RETURN
+                type AS Type
+        ]]></cypher>
+    </constraint>
+
+
+    <group id="default">
+        <includeConstraint refId="my-rules:TestClassName"/>
+        <includeConstraint refId="example:ConstructorOfDateMustNotBeUsed"/>
+    </group>
+
+</jqa:jqassistant-rules>
+

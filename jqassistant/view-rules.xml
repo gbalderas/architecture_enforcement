@@ -1,0 +1,71 @@
+<jqa:jqassistant-rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                       xmlns:jqa="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0"
+                       xsi:schemaLocation="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0 ">
+
+    <concept id="view:ViewClass">
+        <description>Labels all classes implementing the View interface as "View".</description>
+        <cypher><![CDATA[
+            MATCH
+                (viewClass:Type:Class)-[:IMPLEMENTS*]->(viewType:Type)
+            WHERE
+                viewType.fqn = "de.saxsys.mvvmfx.FxmlView"
+            SET
+                viewClass:View
+            RETURN
+                viewClass
+        ]]></cypher>
+    </concept>
+
+    <concept id="view:ModelPackage">
+        <description>Model Package</description>
+        <cypher><![CDATA[
+            MATCH (t:Type) WHERE t.fqn =~ ".*model.*" SET t:ModelClass RETURN t
+        ]]></cypher>
+    </concept>
+
+    <constraint id="view:ClassNameMustHaveViewSuffix">
+        <requiresConcept refId="view:ViewClass"/>
+        <description>All FxmlView implementations must have a name suffix "View".</description>
+        <cypher><![CDATA[
+            MATCH
+                (viewClass:Class:View)
+            WHERE
+                NOT viewClass.name =~ ".*View"
+            RETURN
+                viewClass AS ViewClass
+        ]]></cypher>
+    </constraint>
+
+    <constraint id="view:ClassesMustBeLocatedInViewsPackage">
+        <requiresConcept refId="view:ViewClass"/>
+        <description>All FxmlView implementations must be located in the package "views".</description>
+        <cypher><![CDATA[
+            MATCH
+                (package:Package)-[:CONTAINS]->(viewClass:Class:View)
+            WHERE
+                NOT package.name = "views"
+            RETURN
+                viewClass AS ViewClass, package AS InvalidPackage
+        ]]></cypher>
+    </constraint>
+
+
+    <constraint id="view:ViewsShouldNotAccessTheModelPackage">
+        <requiresConcept refId="view:ViewClass"/>
+        <requiresConcept refId="view:ModelPackage"/>
+        <description>All Views should not access the model package</description>
+        <cypher>
+            MATCH
+                (viewClass:Class:View)-[:DEPENDS_ON]->(modelClass:Class:ModelClass)
+            RETURN
+                viewClass AS InvalidViewClass, modelClass AS UsedModelClass
+
+        </cypher>
+    </constraint>
+
+    <group id="view-rules">
+        <includeConstraint refId="view:ViewsShouldNotAccessTheModelPackage"/>
+        <includeConstraint refId="view:ClassesMustBeLocatedInViewsPackage"/>
+    </group>
+
+    </jqa:jqassistant-rules>

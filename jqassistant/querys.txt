@@ -1,0 +1,51 @@
+MATCH
+                (viewModelClass:Type:Class)-[:IMPLEMENTS*]->(viewModelType:Type),
+ 				(dateType:Type)-[:DECLARES]->(forbiddenMethod:Method),
+                (viewModelClass:ViewModel)-[:DECLARES]->(method:Method)-[:INVOKES]->(forbiddenMethod)
+            WHERE
+                viewModelType.fqn = "de.saxsys.mvvmfx.ViewModel"
+                AND dateType.fqn = 'java.util.Date'
+                AND forbiddenMethod:Constructor
+          RETURN
+                method AS Method
+
+
+                // viewmodels who create new Date instance
+
+
+
+
+MATCH
+      (viewClass:Type:Class)-[:IMPLEMENTS*]->(viewType:Type),
+      (dateType:Type)-[:DECLARES]->(forbiddenMethod:Method),
+      (viewModelClass:Type:Class)-[:IMPLEMENTS*]->(viewModelType:Type),
+      (viewClass:View)-[:DECLARES]->(method:Method)-[:INVOKES]->(forbiddenMethod)
+WHERE
+       viewType.fqn = "de.saxsys.mvvmfx.FxmlView"
+       AND viewModelType.fqn = "de.saxsys.mvvmfx.ViewModel"
+       AND dateType.fqn = 'java.util.Date'
+       AND forbiddenMethod:Constructor
+SET
+       viewClass:View
+RETURN
+       viewClass
+
+
+.
+
+
+// gets all ViewModels that depend on a View
+// depends means it calls or uses fields or methods from a view.
+
+MATCH
+	(viewModelClass:Type:Class)-[:IMPLEMENTS]->(viewModelType:Type),
+	(viewClass:Type:Class)-[:IMPLEMENTS]->(viewType:Type),
+	(vm:Type:ViewModel)-[:DEPENDS_ON]->(v:Type:View)
+WHERE
+	viewModelType.fqn = "de.saxsys.mvvmfx.ViewModel" AND
+	viewType.fqn = "de.saxsys.mvvmfx.FxmlView"
+SET
+	viewModelClass:ViewModel,
+	viewClass:View
+RETURN
+	DISTINCT vm AS InvalidViewModel, v AS DependantView

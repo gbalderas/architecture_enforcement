@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.views.MainView">
+   <children>
+      <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+         <items>
+            <VBox>
+               <children>
+                  <fx:include source="SearchBarView.fxml" />
+                  <fx:include source="ConstellationListView.fxml" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <fx:include source="ConstellationInformationView.fxml" />
+         </items></SplitPane>
+   </children>
+</VBox>
