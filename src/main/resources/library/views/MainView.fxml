@@ -10,10 +10,10 @@
             <VBox>
                <children>
                   <fx:include source="SearchBarView.fxml" />
-                  <fx:include source="ConstellationListView.fxml" VBox.vgrow="ALWAYS" />
+                  <fx:include source="RecipeListView.fxml" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <fx:include source="ConstellationInformationView.fxml" />
+            <fx:include source="RecipeDescriptionView.fxml" />
          </items></SplitPane>
    </children>
 </VBox>

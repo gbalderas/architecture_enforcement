@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.views.RecipeDescriptionView">
+   <children>
+      <Label fx:id="nameLabel" text="Name" />
+      <Label fx:id="difficultyLabel" text="Difficulty" />
+      <Label fx:id="ingredientsLabel" text="Ingredients" />
+      <Label fx:id="preparationLabel" text="preparation" wrapText="true" />
+      <Label fx:id="cookingInstructionsLabel" text="cookingInstructions" wrapText="true" />
+   </children>
+</VBox>

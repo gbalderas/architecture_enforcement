@@ -4,7 +4,7 @@ import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import library.model.SearchConstellations;
+import library.model.Search;
 
 
 /**
@@ -18,14 +18,20 @@ public class SearchBarViewModel implements ViewModel{
         return searchFieldTextProperty;
     }
 
-    public void search(String query) {
-        ObservableList<String> constellations = SearchConstellations.getConstellations(query);
+    public void search() {
+        String query = searchFieldTextProperty.getValue();
+        if(query.isEmpty()){
+            searchWasEmpty();
+            return;
+        }
 
-        ConstellationListViewModel.getINSTANCE().getItemsProperty().setValue(constellations);
+        ObservableList<String> recepes = Search.forRecipes(query);
+
+        RecipeListViewModel.getINSTANCE().getItemsProperty().setValue(recepes);
     }
 
 
     public void searchWasEmpty() {
-        ConstellationListViewModel.getINSTANCE().resetList();
+        RecipeListViewModel.getINSTANCE().resetList();
     }
 }

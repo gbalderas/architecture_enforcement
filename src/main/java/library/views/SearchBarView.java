@@ -31,11 +31,7 @@ public class SearchBarView implements FxmlView<SearchBarViewModel>, Initializabl
 
     @FXML
     public void search() {
-        if (searchTextField.getText().isEmpty()) {
-            viewModel.searchWasEmpty();
-        } else {
-            viewModel.search(searchTextField.getText());
-        }
+            viewModel.search();
     }
 
 }
