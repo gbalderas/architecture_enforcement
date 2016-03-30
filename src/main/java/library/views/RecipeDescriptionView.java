@@ -28,7 +28,7 @@ public class RecipeDescriptionView implements FxmlView<RecipeDescriptionViewMode
     private Label preparationLabel;
 
     @FXML
-    private Label cookingInstructionsLabel;
+    private Label instructionsLabel;
 
     @InjectViewModel
     private RecipeDescriptionViewModel viewModel;
@@ -40,7 +40,7 @@ public class RecipeDescriptionView implements FxmlView<RecipeDescriptionViewMode
         difficultyLabel.textProperty().bind(viewModel.getDifficultyProperty());
         ingredientsLabel.textProperty().bind(viewModel.getIngredientsProperty());
         preparationLabel.textProperty().bind(viewModel.getPreparationProperty());
-        cookingInstructionsLabel.textProperty().bind(viewModel.getCookingInstructionsProperty());
+        instructionsLabel.textProperty().bind(viewModel.getCookingInstructionsProperty());
 
     }
 }

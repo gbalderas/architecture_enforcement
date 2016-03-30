@@ -30,7 +30,7 @@ public class RecipeDescriptionViewModel implements ViewModel {
         difficultyProperty.setValue(recipe.getDifficulty());
 //        ingredientsProperty.setValue(recipe.getIngredients());
         preparationProperty.setValue(recipe.getPreparation());
-        cookingInstructionsProperty.setValue(recipe.getCookingInstructions());
+        cookingInstructionsProperty.setValue(recipe.getInstructions());
     }
 
     public StringProperty getNameProperty() {

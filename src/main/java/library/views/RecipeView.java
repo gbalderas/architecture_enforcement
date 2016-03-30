@@ -56,6 +56,5 @@ public class RecipeView implements FxmlView<RecipeViewModel>, Initializable{
         IngredientsTextField.textProperty().bindBidirectional(viewModel.getIngredientsProperty());
         PreparationTextArea.textProperty().bindBidirectional(viewModel.getPreparationProperty());
         InstructionsTextArea.textProperty().bindBidirectional(viewModel.getInstructionsProperty());
-
     }
 }

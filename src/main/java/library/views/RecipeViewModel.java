@@ -10,9 +10,8 @@ import library.model.Recipe;
  */
 public class RecipeViewModel implements ViewModel {
 
-
-
-    private static Recipe recipe;
+    private static RecipeViewModel INSTANCE;
+    private Recipe recipe;
     private StringProperty nameProperty = new SimpleStringProperty();
     private StringProperty difficultyProperty = new SimpleStringProperty();
     private StringProperty ingredientsProperty = new SimpleStringProperty();
@@ -21,12 +20,10 @@ public class RecipeViewModel implements ViewModel {
 
 
     public RecipeViewModel(){
-
+        this.INSTANCE = this;
     }
 
-
     public void finishRecipe(){
-
         String[] ingredients = ingredientsProperty.get().split(";");
         String name = nameProperty.get();
         String difficulty = difficultyProperty.get();
@@ -41,14 +38,13 @@ public class RecipeViewModel implements ViewModel {
         recipe = null;
     }
 
-    public static Recipe getRecipe() {
+    public Recipe getRecipe() {
         return recipe;
     }
 
     public StringProperty getNameProperty() {
         return nameProperty;
     }
-
 
     public StringProperty getDifficultyProperty() {
         return difficultyProperty;
@@ -65,5 +61,23 @@ public class RecipeViewModel implements ViewModel {
     public StringProperty getInstructionsProperty() {
         return instructionsProperty;
     }
+
+    public static RecipeViewModel getINSTANCE() {
+        return INSTANCE;
+    }
+
+
+    public void setRecipeFields(Recipe recipe){
+        nameProperty.set(recipe.getName());
+        difficultyProperty.set(recipe.getDifficulty());
+        preparationProperty.set(recipe.getPreparation());
+        instructionsProperty.set(recipe.getInstructions());
+
+        StringBuilder stringBuilder = new StringBuilder();
+        recipe.getIngredients().forEach(ingredient -> stringBuilder.append(ingredient+";"));
+
+        ingredientsProperty.setValue(stringBuilder.toString());
+    }
+
 }
 

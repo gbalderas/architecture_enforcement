@@ -9,6 +9,6 @@
       <Label fx:id="difficultyLabel" text="Difficulty" />
       <Label fx:id="ingredientsLabel" text="Ingredients" />
       <Label fx:id="preparationLabel" text="preparation" wrapText="true" />
-      <Label fx:id="cookingInstructionsLabel" text="cookingInstructions" wrapText="true" />
+      <Label fx:id="instructionsLabel" text="instructions" wrapText="true" />
    </children>
 </VBox>

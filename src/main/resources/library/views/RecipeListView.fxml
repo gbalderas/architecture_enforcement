@@ -10,8 +10,8 @@
       <ListView fx:id="recipesList" maxHeight="1.7976931348623157E308" maxWidth="300.0" onMouseClicked="#clickedItem" VBox.vgrow="ALWAYS" />
       <ButtonBar prefHeight="40.0" prefWidth="200.0">
         <buttons>
-          <Button fx:id="addRecipeButton" mnemonicParsing="false" onAction="#addNewRecipe" text="Add Recipe" />
-            <Button fx:id="editRecipeButton" mnemonicParsing="false" text="Edit Recipe" />
+          <Button mnemonicParsing="false" onAction="#addNewRecipe" text="Add Recipe" />
+            <Button mnemonicParsing="false" onAction="#editRecipe" text="Edit Recipe" />
         </buttons>
       </ButtonBar>
    </children>

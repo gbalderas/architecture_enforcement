@@ -9,21 +9,29 @@ import java.util.Collections;
 public class Recipe {
 
 
-    final private ArrayList<String> ingredients = new ArrayList<>();
-    final private String name;
-    final private String difficulty;
-    final private String preparation;
-    final private String cookingInstructions;
+    private ArrayList<String> ingredients;
+    private String name;
+    private String difficulty;
+    private String preparation;
+    private String instructions;
 
 
-    public Recipe(String name, String difficulty, String preparation, String cookingInstructions, String[] ingredients) {
+    public Recipe(String name, String difficulty, String preparation, String instructions, String[] ingredients) {
         this.name = name;
         this.difficulty = difficulty;
         this.preparation = preparation;
-        this.cookingInstructions = cookingInstructions;
+        this.instructions = instructions;
+        this.ingredients = new ArrayList<>();
         Collections.addAll(this.ingredients, ingredients);
     }
 
+    public Recipe(String name, String difficulty, String preparation, String instructions, ArrayList<String> ingredients) {
+        this.name = name;
+        this.difficulty = difficulty;
+        this.preparation = preparation;
+        this.instructions = instructions;
+        this.ingredients = ingredients;
+    }
 
     public ArrayList<String> getIngredients() {
         return ingredients;
@@ -41,7 +49,7 @@ public class Recipe {
         return preparation;
     }
 
-    public String getCookingInstructions() {
-        return cookingInstructions;
+    public String getInstructions() {
+        return instructions;
     }
 }

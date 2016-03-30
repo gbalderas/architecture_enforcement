@@ -5,7 +5,6 @@ import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 
@@ -19,12 +18,6 @@ public class RecipeListView implements FxmlView<RecipeListViewModel>, Initializa
 
     @FXML
     public ListView<String> recipesList;
-
-    @FXML
-    private Button addRecipeButton;
-
-    @FXML
-    private Button editRecipeButton;
 
     @InjectViewModel
     private RecipeListViewModel viewModel;
@@ -47,4 +40,11 @@ public class RecipeListView implements FxmlView<RecipeListViewModel>, Initializa
         viewModel.addNewRecipe();
     }
 
+    @FXML
+    public void editRecipe(ActionEvent actionEvent) {
+        String selectedRecipe = recipesList.getSelectionModel().getSelectedItem();
+        if(selectedRecipe == null)
+            return;
+        viewModel.editRecipe(selectedRecipe);
+    }
 }
