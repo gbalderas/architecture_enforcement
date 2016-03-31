@@ -1,5 +1,7 @@
 package library.model;
 
+
+import library.rulebreakingpackage.BadModel2;
 import library.rulebreakingpackage.BadView;
 
 /**
@@ -13,6 +15,8 @@ public class BadModel {
         BadView badView = new BadView();
         badView.test();
 
+
+        BadModel2.something();
     }
 
 

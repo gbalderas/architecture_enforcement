@@ -11,7 +11,7 @@
                 model.fqn =~ ".*model.*" AND
                 NOT anyClass.fqn =~  ".*model.*"
             RETURN
-                model AS InvalidModel
+                model AS InvalidModel, anyClass as ClassCalled
         ]]></cypher>
     </constraint>
 

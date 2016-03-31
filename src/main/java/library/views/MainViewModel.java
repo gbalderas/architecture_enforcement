@@ -1,8 +1,6 @@
 package library.views;
 
-import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.ViewModel;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -10,15 +8,27 @@ import javafx.stage.Stage;
  */
 public class MainViewModel implements ViewModel{
 
-    private static final Stage recipeStage = new Stage();
 
-    public MainViewModel() {
-        recipeStage.setTitle("My New Stage Title");
-        recipeStage.setScene(new Scene(FluentViewLoader.fxmlView(RecipeView.class).load().getView()));
+    private static MainViewModel INSTANCE;
+
+    private Stage recipeStage = new Stage();
+
+    public MainViewModel(){
+        this.INSTANCE = this;
     }
 
 
-    public static Stage getRecipeStage() {
+
+    public Stage getRecipeStage() {
         return recipeStage;
     }
+
+    public void setRecipeStage(Stage stage){
+        this.recipeStage = stage;
+    }
+
+    public static MainViewModel getInstance(){
+        return INSTANCE;
+    }
+
 }

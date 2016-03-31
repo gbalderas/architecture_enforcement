@@ -52,7 +52,7 @@ public class RecipeListViewModel implements ViewModel {
     }
 
     public void addNewRecipe() {
-        MainViewModel.getRecipeStage().showAndWait();
+        MainViewModel.getInstance().getRecipeStage().showAndWait();
         Recipe newRecipe = RecipeViewModel.getINSTANCE().getRecipe();
         if(newRecipe != null){
             RecipeMap.addRecipe(newRecipe);
@@ -63,15 +63,14 @@ public class RecipeListViewModel implements ViewModel {
     public void editRecipe(String selectedRecipe){
         Recipe recipe = RecipeMap.getRecipe(selectedRecipe);
         RecipeViewModel.getINSTANCE().setRecipeFields(recipe);
-        MainViewModel.getRecipeStage().showAndWait();
+        MainViewModel.getInstance().getRecipeStage().showAndWait();
         recipe = RecipeViewModel.getINSTANCE().getRecipe();
         if(recipe != null){
             RecipeMap.replaceRecipe(selectedRecipe, recipe);
             list.remove(selectedRecipe);
             list.add(recipe.getName());
+            recipeClicked(recipe.getName());
         }
-
-        recipeClicked(recipe.getName());
 
     }
 
