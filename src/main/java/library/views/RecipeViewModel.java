@@ -10,7 +10,7 @@ import library.model.Recipe;
  */
 public class RecipeViewModel implements ViewModel {
 
-    private static RecipeViewModel INSTANCE;
+    private static RecipeViewModel instance;
     private Recipe recipe;
     private StringProperty nameProperty = new SimpleStringProperty();
     private StringProperty difficultyProperty = new SimpleStringProperty();
@@ -20,7 +20,7 @@ public class RecipeViewModel implements ViewModel {
 
 
     public RecipeViewModel(){
-        this.INSTANCE = this;
+        instance = this;
     }
 
     public void finishRecipe(){
@@ -62,8 +62,8 @@ public class RecipeViewModel implements ViewModel {
         return instructionsProperty;
     }
 
-    public static RecipeViewModel getINSTANCE() {
-        return INSTANCE;
+    public static RecipeViewModel getInstance() {
+        return instance;
     }
 
 

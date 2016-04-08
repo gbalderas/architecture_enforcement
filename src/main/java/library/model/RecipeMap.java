@@ -8,7 +8,6 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,32 +16,26 @@ import java.util.TreeMap;
  */
 public class RecipeMap {
 
-    private static Map<String, Recipe> recipeMap = new TreeMap<>();
+    private static Map<String, Recipe> recipes = new TreeMap<>();
 
-    public void addRecipes(Recipe... recipes) {
-        Arrays.stream(recipes).forEach(r -> recipeMap.put(r.getName(), r));
-    }
+    private RecipeMap(){}
 
     public static void addRecipe(Recipe recipe) {
-        recipeMap.put(recipe.getName(), recipe);
+        recipes.put(recipe.getName(), recipe);
 
         saveRecipes();
     }
 
-    public static void setRecipeMap(Map<String, Recipe> recipesMap) {
-        recipeMap = recipesMap;
-    }
-
-    public static Map<String, Recipe> getRecipeMap() {
-        return recipeMap;
+    public static Map<String, Recipe> getRecipes() {
+        return recipes;
     }
 
     public static Recipe getRecipe(String name) {
-        return recipeMap.get(name);
+        return recipes.get(name);
     }
 
     public static void replaceRecipe(String recipeToEdit, Recipe newRecipe){
-        recipeMap.remove(recipeToEdit);
+        recipes.remove(recipeToEdit);
         addRecipe(newRecipe);
     }
 
@@ -50,7 +43,7 @@ public class RecipeMap {
     private static void saveRecipes() {
         JSONArray jsonArray = new JSONArray();
 
-        recipeMap.forEach((name, recipe) -> {
+        recipes.forEach((name, recipe) -> {
             JSONObject jsonRecipe = JsonConverter.convertRecipeToJson(recipe);
             jsonArray.add(jsonRecipe);
         });
@@ -66,17 +59,21 @@ public class RecipeMap {
 
     }
 
-    public static void loadRecipes() throws IOException, ParseException {
+    public static void loadRecipes(){
         JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader("recipes.json"));
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = (JSONObject) jsonParser.parse(new FileReader("recipes.json"));
+            JSONArray recipes = (JSONArray) jsonObject.get("recipes");
 
-        JSONArray recipes = (JSONArray) jsonObject.get("recipes");
 
-
-        recipes.forEach(jsonRecipe -> {
-            Recipe recipe = JsonConverter.convertJsonToRecipe((JSONObject) jsonRecipe);
-            recipeMap.put(recipe.getName(), recipe);
-        });
+            recipes.forEach(jsonRecipe -> {
+                Recipe recipe = JsonConverter.convertJsonToRecipe((JSONObject) jsonRecipe);
+                RecipeMap.recipes.put(recipe.getName(), recipe);
+            });
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 

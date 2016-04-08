@@ -12,4 +12,8 @@ public class BadViewModelTwo implements ViewModel {
         BadViewTwo view = new BadViewTwo();
     }
 
+
+    public String myCall(){
+        return "hello";
+    }
 }

@@ -25,13 +25,13 @@ public class SearchBarViewModel implements ViewModel{
             return;
         }
 
-        ObservableList<String> recepes = Search.forRecipes(query);
+        ObservableList<String> recipes = Search.forRecipes(query);
 
-        RecipeListViewModel.getINSTANCE().getItemsProperty().setValue(recepes);
+        RecipeListViewModel.getInstance().getItemsProperty().setValue(recipes);
     }
 
 
     public void searchWasEmpty() {
-        RecipeListViewModel.getINSTANCE().resetList();
+        RecipeListViewModel.getInstance().resetList();
     }
 }

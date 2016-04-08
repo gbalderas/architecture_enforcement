@@ -9,18 +9,29 @@ import library.rulebreakingpackage.BadView;
  */
 public class BadModel {
 
-    public void BadMethod(){
+    public void badMethod(){
 
         //Model shouldn't have access to the view
         BadView badView = new BadView();
-        badView.test();
+        BadView.test();
 
+        badView.myPublicMethod();
 
         BadModel2.something();
     }
 
 
     public static void modelStaticMethod(){
+        System.out.println("nothing");
 
+    }
+
+    public static Object getBadView(){
+        BadView badView = new BadView();
+        return badView.getBadView();
+    }
+
+    public static Class getBadViewClass(){
+        return BadView.getBadViewClass();
     }
 }

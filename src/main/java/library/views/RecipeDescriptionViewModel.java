@@ -17,10 +17,10 @@ public class RecipeDescriptionViewModel implements ViewModel {
     private StringProperty preparationProperty = new SimpleStringProperty();
     private StringProperty cookingInstructionsProperty = new SimpleStringProperty();
 
-    private static RecipeDescriptionViewModel INSTANCE;
+    private static RecipeDescriptionViewModel instance;
 
     public RecipeDescriptionViewModel() {
-        INSTANCE = this;
+        instance = this;
     }
 
     public void displayRecipe(String selectedRecipe) {
@@ -28,9 +28,9 @@ public class RecipeDescriptionViewModel implements ViewModel {
 
         nameProperty.setValue(recipe.getName());
         difficultyProperty.setValue(recipe.getDifficulty());
-//        ingredientsProperty.setValue(recipe.getIngredients());
         preparationProperty.setValue(recipe.getPreparation());
         cookingInstructionsProperty.setValue(recipe.getInstructions());
+//        ingredientsProperty.setValue(recipe.getIngredients());
     }
 
     public StringProperty getNameProperty() {
@@ -53,7 +53,7 @@ public class RecipeDescriptionViewModel implements ViewModel {
         return cookingInstructionsProperty;
     }
 
-    public static RecipeDescriptionViewModel getINSTANCE() {
-        return INSTANCE;
+    public static RecipeDescriptionViewModel getInstance() {
+        return instance;
     }
 }

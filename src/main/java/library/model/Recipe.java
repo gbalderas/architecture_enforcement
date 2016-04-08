@@ -2,6 +2,7 @@ package library.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by balderas on 22.03.16.
@@ -25,15 +26,15 @@ public class Recipe {
         Collections.addAll(this.ingredients, ingredients);
     }
 
-    public Recipe(String name, String difficulty, String preparation, String instructions, ArrayList<String> ingredients) {
+    public Recipe(String name, String difficulty, String preparation, String instructions, List<String> ingredients) {
         this.name = name;
         this.difficulty = difficulty;
         this.preparation = preparation;
         this.instructions = instructions;
-        this.ingredients = ingredients;
+        this.ingredients = new ArrayList<>(ingredients);
     }
 
-    public ArrayList<String> getIngredients() {
+    public List<String> getIngredients() {
         return ingredients;
     }
 

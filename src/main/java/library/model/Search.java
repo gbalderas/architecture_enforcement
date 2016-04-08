@@ -10,9 +10,11 @@ import java.util.stream.Collectors;
  * Created by gerardo.balderas on 15.03.2016.
  */
 public class Search {
-    
+
+    private Search(){}
+
     public static ObservableList<String> forRecipes(String query){
-        List<String> list = RecipeMap.getRecipeMap().entrySet().stream()
+        List<String> list = RecipeMap.getRecipes().entrySet().stream()
                 .filter(item -> containsQuery(item.getValue(), query.toLowerCase()))
                 .map(item -> item.getValue().getName())
                 .collect(Collectors.toList());
@@ -22,7 +24,7 @@ public class Search {
     }
 
     private static Boolean containsQuery(Recipe recipe, String query){
-        return (recipe.getName().toLowerCase().contains(query));
+        return recipe.getName().toLowerCase().contains(query);
     }
 
 }

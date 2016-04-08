@@ -1,6 +1,5 @@
 package library.model;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -21,7 +20,9 @@ public class RecipeMapMock {
     }
 
     private void addRecipes(Recipe... recipes){
-        Arrays.stream(recipes).forEach(c -> recipeMap.put(c.getName(), c));
+        for (Recipe recipe : recipes) {
+            recipeMap.put(recipe.getName(), recipe);
+        }
     }
 
     public Map<String, Recipe> getRecipeMap() {

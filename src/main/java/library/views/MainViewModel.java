@@ -9,12 +9,12 @@ import javafx.stage.Stage;
 public class MainViewModel implements ViewModel{
 
 
-    private static MainViewModel INSTANCE;
+    private static MainViewModel instance;
 
     private Stage recipeStage = new Stage();
 
     public MainViewModel(){
-        this.INSTANCE = this;
+        instance = this;
     }
 
 
@@ -28,7 +28,7 @@ public class MainViewModel implements ViewModel{
     }
 
     public static MainViewModel getInstance(){
-        return INSTANCE;
+        return instance;
     }
 
 }

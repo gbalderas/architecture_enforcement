@@ -5,8 +5,9 @@ package library.rulebreakingpackage;
  */
 public class BadModel2 {
 
+    private BadModel2(){}
 
     public static void something(){
-
+        System.out.println("nothing");
     }
 }

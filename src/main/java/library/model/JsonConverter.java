@@ -5,11 +5,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by balderas on 23.03.16.
  */
 public class JsonConverter {
+
+    private JsonConverter(){}
 
 
     public static JSONObject convertRecipeToJson(Recipe recipe){
@@ -34,7 +37,7 @@ public class JsonConverter {
         String instructions = jsonRecipe.get("instructions").toString();
 
         JSONArray ingredients = (JSONArray) jsonRecipe.get("ingredients");
-        ArrayList<String> ingredientsList = new ArrayList<>();
+        List<String> ingredientsList = new ArrayList<>();
         ingredients.forEach(i-> ingredientsList.add(i.toString()));
 
         return new Recipe(name, difficulty, preparation, instructions, ingredientsList);

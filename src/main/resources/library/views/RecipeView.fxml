@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<DialogPane fx:id="DialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.views.RecipeView">
+<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="library.views.RecipeView">
     <header>
       <AnchorPane minHeight="0.0" minWidth="0.0">
          <children>
@@ -22,11 +22,11 @@
             <Label layoutX="41.0" layoutY="72.0" text="Ingredients" />
             <Label layoutX="41.0" layoutY="107.0" text="Preparation" />
             <Label layoutX="39.0" layoutY="222.0" text="Cooking Instructions" />
-            <TextField fx:id="NameTextField" layoutX="181.0" layoutY="9.0" />
-            <TextField fx:id="DifficultyTextField" layoutX="181.0" layoutY="39.0" />
-            <TextField fx:id="IngredientsTextField" layoutX="181.0" layoutY="67.0" />
-            <TextArea fx:id="PreparationTextArea" layoutX="69.0" layoutY="134.0" prefHeight="80.0" prefWidth="383.0" />
-            <TextArea fx:id="InstructionsTextArea" layoutX="69.0" layoutY="246.0" prefHeight="80.0" prefWidth="383.0" />
+            <TextField fx:id="nameTextField" layoutX="181.0" layoutY="9.0" />
+            <TextField fx:id="difficultyTextField" layoutX="181.0" layoutY="39.0" />
+            <TextField fx:id="ingredientsTextField" layoutX="181.0" layoutY="67.0" />
+            <TextArea fx:id="preparationTextArea" layoutX="69.0" layoutY="134.0" prefHeight="80.0" prefWidth="383.0" />
+            <TextArea fx:id="instructionsTextArea" layoutX="69.0" layoutY="246.0" prefHeight="80.0" prefWidth="383.0" />
          </children>
       </AnchorPane>
    </content>

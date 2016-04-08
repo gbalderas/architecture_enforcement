@@ -15,46 +15,47 @@ import java.util.ResourceBundle;
 public class RecipeView implements FxmlView<RecipeViewModel>, Initializable{
 
     @FXML
-    private DialogPane DialogPane;
+    private DialogPane dialogPane;
 
     @FXML
-    private TextField NameTextField;
+    private TextField nameTextField;
 
     @FXML
-    private TextField DifficultyTextField;
+    private TextField difficultyTextField;
 
     @FXML
-    private TextField IngredientsTextField;
+    private TextField ingredientsTextField;
 
     @FXML
-    private TextArea PreparationTextArea;
+    private TextArea preparationTextArea;
 
     @FXML
-    private TextArea InstructionsTextArea;
+    private TextArea instructionsTextArea;
 
     @InjectViewModel
     private RecipeViewModel viewModel;
 
-    private Button finishButton, cancelButton;
+    private Button finishButton;
+    private Button cancelButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        finishButton = (Button) DialogPane.lookupButton(ButtonType.FINISH);
-        cancelButton = (Button) DialogPane.lookupButton(ButtonType.CANCEL);
+        finishButton = (Button) dialogPane.lookupButton(ButtonType.FINISH);
+        cancelButton = (Button) dialogPane.lookupButton(ButtonType.CANCEL);
 
         finishButton.setOnAction(event -> {
                 viewModel.finishRecipe();
-                DialogPane.getScene().getWindow().hide();
+                dialogPane.getScene().getWindow().hide();
         });
         cancelButton.setOnAction(event -> {
             viewModel.cancelRecipe();
-            DialogPane.getScene().getWindow().hide();
+            dialogPane.getScene().getWindow().hide();
         });
 
-        NameTextField.textProperty().bindBidirectional(viewModel.getNameProperty());
-        DifficultyTextField.textProperty().bindBidirectional(viewModel.getDifficultyProperty());
-        IngredientsTextField.textProperty().bindBidirectional(viewModel.getIngredientsProperty());
-        PreparationTextArea.textProperty().bindBidirectional(viewModel.getPreparationProperty());
-        InstructionsTextArea.textProperty().bindBidirectional(viewModel.getInstructionsProperty());
+        nameTextField.textProperty().bindBidirectional(viewModel.getNameProperty());
+        difficultyTextField.textProperty().bindBidirectional(viewModel.getDifficultyProperty());
+        ingredientsTextField.textProperty().bindBidirectional(viewModel.getIngredientsProperty());
+        preparationTextArea.textProperty().bindBidirectional(viewModel.getPreparationProperty());
+        instructionsTextArea.textProperty().bindBidirectional(viewModel.getInstructionsProperty());
     }
 }

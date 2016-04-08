@@ -7,9 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import library.model.Recipe;
 import library.model.RecipeMap;
-import org.json.simple.parser.ParseException;
-
-import java.io.IOException;
 
 /**
  * Created by gerardo.balderas on 14.03.2016.
@@ -17,20 +14,13 @@ import java.io.IOException;
 public class RecipeListViewModel implements ViewModel {
 
     private ObservableList<String> list = FXCollections.observableArrayList();
-    private static RecipeListViewModel INSTANCE;
+    private static RecipeListViewModel instance;
     private ObjectProperty<ObservableList<String>> itemsProperty = new SimpleObjectProperty<>();
 
     public RecipeListViewModel() {
-        INSTANCE = this;
-        try {
-            RecipeMap.loadRecipes();
-            RecipeMap.getRecipeMap().forEach((name, recipe) -> list.add(name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        instance = this;
+        RecipeMap.loadRecipes();
+        RecipeMap.getRecipes().forEach((name, recipe) -> list.add(name));
         itemsProperty.setValue(list.sorted());
     }
 
@@ -40,32 +30,32 @@ public class RecipeListViewModel implements ViewModel {
     }
 
     public void recipeClicked(String selectedRecipe) {
-        RecipeDescriptionViewModel.getINSTANCE().displayRecipe(selectedRecipe);
+        RecipeDescriptionViewModel.getInstance().displayRecipe(selectedRecipe);
     }
 
-    public static RecipeListViewModel getINSTANCE() {
-        return INSTANCE;
+    public static RecipeListViewModel getInstance() {
+        return instance;
     }
 
-    public void resetList(){
+    public void resetList() {
         itemsProperty.setValue(list.sorted());
     }
 
     public void addNewRecipe() {
         MainViewModel.getInstance().getRecipeStage().showAndWait();
-        Recipe newRecipe = RecipeViewModel.getINSTANCE().getRecipe();
-        if(newRecipe != null){
+        Recipe newRecipe = RecipeViewModel.getInstance().getRecipe();
+        if (newRecipe != null) {
             RecipeMap.addRecipe(newRecipe);
             list.add(newRecipe.getName());
         }
     }
 
-    public void editRecipe(String selectedRecipe){
+    public void editRecipe(String selectedRecipe) {
         Recipe recipe = RecipeMap.getRecipe(selectedRecipe);
-        RecipeViewModel.getINSTANCE().setRecipeFields(recipe);
+        RecipeViewModel.getInstance().setRecipeFields(recipe);
         MainViewModel.getInstance().getRecipeStage().showAndWait();
-        recipe = RecipeViewModel.getINSTANCE().getRecipe();
-        if(recipe != null){
+        recipe = RecipeViewModel.getInstance().getRecipe();
+        if (recipe != null) {
             RecipeMap.replaceRecipe(selectedRecipe, recipe);
             list.remove(selectedRecipe);
             list.add(recipe.getName());
