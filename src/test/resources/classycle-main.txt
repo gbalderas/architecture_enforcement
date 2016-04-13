@@ -1,0 +1,24 @@
+#
+# This is an example of a dependency definition file
+#
+show allResults
+
+{library} = library
+
+[model] = ${library}.model.*
+[non-model] = ${library}.* excluding [model]
+[viewmodel] = ${library}.views.*ViewModel
+[views] = ${library}.views.*View
+
+layer viewlayer = [views]
+layer viewmodellayer = [viewmodel]
+layer modellayer = [model]
+
+check sets [model] [views] [viewmodel]
+
+#check [model] independentOf [views] [viewmodel]
+#check [viewmodel] independentOf [views]
+#check [views] directlyIndependentOf [model]
+
+
+check layeringOf modellayer viewmodellayer viewlayer

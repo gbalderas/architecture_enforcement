@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'de.saxsys'
+version = '1.0-SNAPSHOT'
+
+description = """"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+buildscript {
+    repositories { maven { url "https://plugins.gradle.org/m2/" } }
+    dependencies {
+        classpath "gradle.plugin.pl.squirrel:classycle-gradle-plugin:1.1"
+    }
+}
+
+apply plugin: "pl.squirrel.classycle"
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'de.saxsys', name: 'mvvmfx', version:'1.4.1'
+    compile group: 'junit', name: 'junit', version:'4.12'
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version:'1.1.1'
+    compile group: 'org.aspectj', name: 'aspectjrt', version:'1.8.7'
+}
+

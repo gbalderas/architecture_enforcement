@@ -2,3 +2,6 @@
 /target
 architecture_enforcement.iml
 /.sonar
+/build
+/gradle
+/.gradle
