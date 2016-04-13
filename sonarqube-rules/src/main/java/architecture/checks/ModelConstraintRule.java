@@ -61,16 +61,14 @@ public class ModelConstraintRule extends IssuableSubscriptionVisitor {
         Symbol symbol = tree.symbol();
         if (!symbol.isUnknown() && !currentType.contains(symbol.owner())) {
             Type type = symbol.type();
-            if (type != null) {
-                String fullyQualifiedName = type.fullyQualifiedName();
-                boolean matchesToInterface = type.symbol().interfaces().stream()
-                        .anyMatch(i -> i.fullyQualifiedName().equals(toFxmlViewInterface));
-                Set<String> currentIssues = issues.peekFirst();
-                if (!currentIssues.contains(fullyQualifiedName) && matchesToInterface) {
-                    System.out.println("Model should not call View Interfaces");
-                    reportIssue(tree, shouldCheckId + " must not use " + fullyQualifiedName);
-                    currentIssues.add(fullyQualifiedName);
-                }
+            String fullyQualifiedName = type.fullyQualifiedName();
+            boolean matchesToInterface = type.symbol().interfaces().stream()
+                    .anyMatch(i -> i.fullyQualifiedName().equals(toFxmlViewInterface));
+            Set<String> currentIssues = issues.peekFirst();
+            if (!currentIssues.contains(fullyQualifiedName) && matchesToInterface) {
+                System.out.println("Model should not call View Interfaces");
+                reportIssue(tree, shouldCheckId + " must not use " + fullyQualifiedName);
+                currentIssues.add(fullyQualifiedName);
             }
         }
     }
@@ -78,7 +76,7 @@ public class ModelConstraintRule extends IssuableSubscriptionVisitor {
     private void initClass(ClassTree tree) {
         Symbol.TypeSymbol symbol = tree.symbol();
         String fullyQualifiedName = symbol.type().fullyQualifiedName();
-        if (matchesFromClasses(fullyQualifiedName)) {
+        if (Util.matchesPattern(fromClasses, fullyQualifiedName)) {
             shouldCheck.addFirst(fullyQualifiedName);
             issues.addFirst(new HashSet<String>());
         } else {
@@ -95,19 +93,6 @@ public class ModelConstraintRule extends IssuableSubscriptionVisitor {
             issues.removeFirst();
             currentType.pop();
         }
-    }
-
-
-    private boolean matchesFromClasses(String fqn){
-
-        if(fromClasses.equals("*")){
-            return true;
-        }
-        if(fromClasses.startsWith("*")){
-            return fqn.matches("."+fromClasses);
-        }
-
-        return fqn.matches(fromClasses);
     }
 
 }

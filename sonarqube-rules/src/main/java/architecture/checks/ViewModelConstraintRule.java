@@ -59,19 +59,7 @@ public class ViewModelConstraintRule extends IssuableSubscriptionVisitor {
 
     private void initClass(ClassTree tree) {
 
-        Symbol.TypeSymbol symbol = tree.symbol();
-        String fullyQualifiedName = symbol.type().fullyQualifiedName();
-        boolean foundInterface = symbol.interfaces().stream()
-                .anyMatch(i -> i.fullyQualifiedName().equals(fromViewModelInterface));
-
-        if (foundInterface) {
-            shouldCheck.addFirst(fullyQualifiedName);
-            issues.addFirst(new HashSet<>());
-        } else {
-            shouldCheck.addFirst(null);
-            issues.addFirst(null);
-        }
-        currentType.push(tree.symbol());
+        Util.initClass(tree, fromViewModelInterface, shouldCheck, issues, currentType);
     }
 
 

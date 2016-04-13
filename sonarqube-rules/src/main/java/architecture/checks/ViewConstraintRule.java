@@ -24,14 +24,14 @@ import java.util.*;
         name = "Views should not depend on Model Package",
         description = "This rule detects usage of Model method or Instances inside a View",
         priority = Priority.BLOCKER,
-        tags = {"mvvm","architecture"})
+        tags = {"mvvm", "architecture"})
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.ARCHITECTURE_RELIABILITY)
 @SqaleConstantRemediation("15min")
 public class ViewConstraintRule extends IssuableSubscriptionVisitor {
 
-//    @RuleProperty(description = "FxmlView Interface")
+    //    @RuleProperty(description = "FxmlView Interface")
     String fromFxmlViewInterface = "de.saxsys.mvvmfx.FxmlView";
-//    @RuleProperty(description = "JavaView Interface")
+    //    @RuleProperty(description = "JavaView Interface")
 //    String fromJavaViewInterface = "de.saxsys.mvvmfx.JavaView";
     @RuleProperty(description = "Model Package")
     String toModelPackage = "*.model.*";
@@ -57,21 +57,7 @@ public class ViewConstraintRule extends IssuableSubscriptionVisitor {
 
 
     private void initClass(ClassTree tree) {
-
-        Symbol.TypeSymbol symbol = tree.symbol();
-        String fullyQualifiedName = symbol.type().fullyQualifiedName();
-        boolean foundInterface = symbol.interfaces().stream()
-                .anyMatch(i -> i.fullyQualifiedName().equals(fromFxmlViewInterface));
-//                        || i.fullyQualifiedName().equals(fromJavaViewInterface));
-
-        if (foundInterface) {
-            shouldCheck.addFirst(fullyQualifiedName);
-            issues.addFirst(new HashSet<>());
-        } else {
-            shouldCheck.addFirst(null);
-            issues.addFirst(null);
-        }
-        currentType.push(tree.symbol());
+        Util.initClass(tree, fromFxmlViewInterface, shouldCheck, issues, currentType);
     }
 
 
@@ -86,15 +72,14 @@ public class ViewConstraintRule extends IssuableSubscriptionVisitor {
         if (!symbol.isUnknown() && !currentType.contains(symbol.owner())) {
             Type type = symbol.type();
             if (!type.isUnknown()) {
-                if (type != null) {
-                    String fullyQualifiedName = type.fullyQualifiedName();
-                    Set<String> currentIssues = issues.peekFirst();
-                    if (matchesFromClasses(fullyQualifiedName)) {
-                        System.out.println("view should not use model!");
-                        reportIssue(tree, shouldCheckId + " must not use " + fullyQualifiedName);
-                        currentIssues.add(fullyQualifiedName);
-                    }
+                String fullyQualifiedName = type.fullyQualifiedName();
+                Set<String> currentIssues = issues.peekFirst();
+                if (Util.matchesPattern(toModelPackage, fullyQualifiedName)) {
+                    System.out.println("view should not use model!");
+                    reportIssue(tree, shouldCheckId + " must not use " + fullyQualifiedName);
+                    currentIssues.add(fullyQualifiedName);
                 }
+
             }
         }
     }
@@ -106,18 +91,6 @@ public class ViewConstraintRule extends IssuableSubscriptionVisitor {
             issues.removeFirst();
             currentType.pop();
         }
-    }
-
-    private boolean matchesFromClasses(String fqn){
-
-        if(toModelPackage.equals("*")){
-            return true;
-        }
-        if(toModelPackage.startsWith("*")){
-            return fqn.matches("."+toModelPackage);
-        }
-
-        return fqn.matches(toModelPackage);
     }
 
 }
