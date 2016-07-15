@@ -2,7 +2,6 @@ package library.views;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -33,18 +32,5 @@ public class RecipeListView implements FxmlView<RecipeListViewModel>, Initializa
         if(selectedRecipe == null)
             return;
         viewModel.recipeClicked(selectedRecipe);
-    }
-
-    @FXML
-    void addNewRecipe(ActionEvent event) {
-        viewModel.addNewRecipe();
-    }
-
-    @FXML
-    public void editRecipe(ActionEvent actionEvent) {
-        String selectedRecipe = recipesList.getSelectionModel().getSelectedItem();
-        if(selectedRecipe == null)
-            return;
-        viewModel.editRecipe(selectedRecipe);
     }
 }

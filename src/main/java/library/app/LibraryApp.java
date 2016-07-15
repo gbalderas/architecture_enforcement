@@ -19,6 +19,27 @@ public class LibraryApp extends Application {
 
         stage.setScene(scene);
         stage.show();
+
+        Foo.getStrings();
+
+//        Rule1Bad.somemethod();
+//        Rule1Ok.somemethod();
+//        Rule2Bad.somemethod();
+//        Rule2Ok.somemethod();
+//        Rule3Bad.sayHello();
+//        Rule3Ok.sayHello();
+//        Rule4Bad.sayHello();
+//        Rule4Bad.sayHello2();
+//        Rule4Bad.sayHello3();
+//        Rule4Ok.sayHello();
+//        Rule5Bad.sayHello();
+//        Rule5Bad.sayHello2();
+//        Rule5Bad.sayHello3();
+//        Rule5Bad.sayHello4();
+//        Rule5Bad.sayHello5();
+//        Rule5Ok.sayHello();
+//        Rule5Ok.sayHello2();
+//        Rule5Ok.sayHello3();
     }
 
     public static void main(String[] a){

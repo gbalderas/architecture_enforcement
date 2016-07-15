@@ -4,9 +4,13 @@
 show allResults
 
 {library} = library
+{mvvmfx} = de.saxsys.mvvmfx
+
+[mvvmfxView] = ${mvvmfx}.View
+[mvvmfxViewModel] = ${mvvmfx}.ViewModel
 
 [model] = ${library}.model.*
-[non-model] = ${library}.* excluding [model]
+#[non-model] = ${library}.* excluding [model]
 [viewmodel] = ${library}.views.*ViewModel
 [views] = ${library}.views.*View
 
@@ -14,11 +18,11 @@ layer viewlayer = [views]
 layer viewmodellayer = [viewmodel]
 layer modellayer = [model]
 
-check sets [model] [views] [viewmodel]
+#check sets [model] [views] [viewmodel]
 
-#check [model] independentOf [views] [viewmodel]
-#check [viewmodel] independentOf [views]
-#check [views] directlyIndependentOf [model]
+#check [model] independentOf [views] [mvvmfxViewModel]
+check [viewmodel] independentOf [mvvmfxView]
+check [views] directlyIndependentOf [model]
 
 
-check layeringOf modellayer viewmodellayer viewlayer
+#check layeringOf modellayer viewmodellayer viewlayer

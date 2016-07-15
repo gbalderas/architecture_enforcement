@@ -3,6 +3,8 @@ package library.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,24 @@ public class Search {
 
     private static Boolean containsQuery(Recipe recipe, String query){
         return recipe.getName().toLowerCase().contains(query);
+    }
+
+     Button awtButton = new Button("AWT");
+     JButton swingButton = new JButton("Swing");
+     static javafx.scene.control.Button javafxButton = new javafx.scene.control.Button("javaFX");
+
+    private void someMethod(){
+        awtButton.getName();
+
+
+        Button awtButton = new Button("new awt");
+        awtButton.getLabel();
+
+        JButton swingButton = new JButton("new swing");
+        swingButton.getText();
+
+        javafx.scene.control.Button javafxButton = new javafx.scene.control.Button("new javafx");
+        javafxButton.getText();
     }
 
 }

@@ -1,4 +1,4 @@
-package library.rulebreakingpackage;
+package library.views;
 
 import de.saxsys.mvvmfx.ViewModel;
 
@@ -9,7 +9,7 @@ public class BadViewModelTwo implements ViewModel {
 
 
     public static void callToViewTest(){
-        BadViewTwo view = new BadViewTwo();
+        SecondBadView view = new SecondBadView();
     }
 
 

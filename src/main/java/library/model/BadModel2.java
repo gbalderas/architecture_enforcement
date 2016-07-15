@@ -1,4 +1,4 @@
-package library.rulebreakingpackage;
+package library.model;
 
 /**
  * Created by gerardo.balderas on 31.03.2016.

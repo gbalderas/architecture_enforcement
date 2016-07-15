@@ -1,12 +1,13 @@
 package library.model;
 
 
-import library.rulebreakingpackage.BadModel2;
-import library.rulebreakingpackage.BadView;
+import library.annotations.Attribute;
+import library.views.BadView;
 
 /**
  * Created by gerardo.balderas on 16.03.2016.
  */
+@Attribute(info = "HELLO")
 public class BadModel {
 
     public void badMethod(){

@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 /**
  * Created by gerardo.balderas on 14.03.2016.
  */
+
 public class MainView implements FxmlView<MainViewModel>, Initializable {
 
 

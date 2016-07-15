@@ -1,0 +1,7 @@
+
+
+1. Classes Annotated by @A should not be annotated by @B without being annotated by @C
+2. Classes Annotated by @B and @C should also be annotated by @A too
+3. Classes Annotated by @A should not have methods with annotation @Z
+4. Classes Annotated by @B should not have methods with annotation @X and/or @Y
+5. Classes Annotated by @C should not have methods with annotation @X, @Y and/or @Z

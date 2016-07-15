@@ -49,3 +49,58 @@ SET
 	viewClass:View
 RETURN
 	DISTINCT vm AS InvalidViewModel, v AS DependantView
+
+
+	            MATCH
+                    (class:Type:Class),
+                    (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(a:Annotation),
+                    (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(b:Annotation)
+                WHERE
+                    a.fqn="library.annotations.A" AND
+                    b.fqn="library.annotations.B"
+                RETURN
+                    class    AS    Class
+
+
+
+            MATCH
+                (class:Type:Class),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(a:Annotation),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(b:Annotation)
+            WHERE
+                a.fqn="library.annotations.A" AND
+                b.fqn="library.annotations.B"
+            SET
+                class:Annotated
+            WITH
+                class
+            MATCH
+                (c:Type:Annotation)
+            WHERE
+                c.fqn="library.annotations.C" AND
+                NOT(class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(c)
+            RETURN
+                class  AS    Class
+
+
+
+            MATCH
+                (class:Type:Class),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(a:Annotation),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(b:Annotation),
+                (c:Type:Annotation)
+            WHERE
+                a.fqn="library.annotations.A" AND
+                b.fqn="library.annotations.B" AND
+                c.fqn="library.annotations.C"
+            SET
+                class:Annotated,
+                c:Annotation
+            WITH
+                class, c
+            MATCH
+                (class)
+            WHERE
+                NOT (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(c)
+            RETURN
+                class  AS    Class

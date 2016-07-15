@@ -1,15 +1,20 @@
 package library.views;
 
+import de.saxsys.mvvmfx.InjectScope;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import library.model.Recipe;
 import library.model.RecipeMap;
+import library.scopes.MyScope;
 
 /**
  * Created by gerardo.balderas on 14.03.2016.
  */
 public class RecipeDescriptionViewModel implements ViewModel {
+
+    @InjectScope
+    private MyScope scope;
 
     private StringProperty nameProperty = new SimpleStringProperty();
     private StringProperty difficultyProperty = new SimpleStringProperty();
@@ -20,7 +25,13 @@ public class RecipeDescriptionViewModel implements ViewModel {
     private static RecipeDescriptionViewModel instance;
 
     public RecipeDescriptionViewModel() {
-        instance = this;
+         instance = this;
+    }
+
+    public void initialize(){
+        scope.subscribe("something_has_changed", (key, payload) -> {
+            System.out.println(scope.selectedElementProperty().get());
+        });
     }
 
     public void displayRecipe(String selectedRecipe) {
@@ -56,4 +67,6 @@ public class RecipeDescriptionViewModel implements ViewModel {
     public static RecipeDescriptionViewModel getInstance() {
         return instance;
     }
+
+
 }

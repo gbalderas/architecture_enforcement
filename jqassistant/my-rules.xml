@@ -2,37 +2,112 @@
                        xmlns:jqa="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0"
                        xsi:schemaLocation="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0 ">
 
-    <constraint id="my-rules:TestClassName">
-        <requiresConcept refId="junit4:TestClass"/>
-        <description>All JUnit test classes must have a name with suffix "Test".</description>
+    <constraint id="my-rules:Rule1">
+        <description>@A und @B dürfen nicht sein ohne @C</description>
         <cypher><![CDATA[
             MATCH
-                (t:Junit4:Test:Class)
-            WHERE NOT
-                t.name =~ ".*Test"
+                (class:Type:Class),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(a:Annotation),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(b:Annotation),
+                (c:Type:Annotation)
+            WHERE
+                a.fqn="library.annotations.A" AND
+                b.fqn="library.annotations.B" AND
+                c.fqn="library.annotations.C" AND
+                NOT (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(c)
             RETURN
-                t AS InvalidTestClass
+                DISTINCT class  AS    Class
         ]]></cypher>
     </constraint>
 
-    <constraint id="example:ConstructorOfDateMustNotBeUsed">
-        <description>Constructors of java.util.Date must not be used.</description>
+    <constraint id="my-rules:Rule2">
+        <description>@B und @C dürfen nicht sein ohne @A</description>
         <cypher><![CDATA[
-            MATCH
-                (dateType:Type)-[:DECLARES]->(forbiddenMethod:Method),
-                (type:Type)-[:DECLARES]->(method:Method)-[:INVOKES]->(forbiddenMethod)
+             MATCH
+                (class:Type:Class),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(b:Annotation),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(c:Annotation),
+                (a:Type:Annotation)
             WHERE
-                dateType.fqn = 'java.util.Date'
-                AND forbiddenMethod:Constructor
+                a.fqn="library.annotations.A" AND
+                b.fqn="library.annotations.B" AND
+                c.fqn="library.annotations.C" AND
+                NOT (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(a)
             RETURN
-                type AS Type
+                DISTINCT class  AS    Class
         ]]></cypher>
     </constraint>
+
+    <constraint id="my-rules:Rule3">
+        <description>Class @A dürfen @Z nicht haben</description>
+        <cypher><![CDATA[
+             MATCH
+                (class:Type:Class),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(a:Annotation),
+                (class)-[:DECLARES]->(m:Method)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(z:Type)
+            WHERE
+                a.fqn="library.annotations.A" AND
+                z.fqn="library.annotations.Z"
+            RETURN
+                DISTINCT class  AS    Class
+        ]]></cypher>
+    </constraint>
+
+    <constraint id="my-rules:Rule4">
+        <description>Class @B dürfen @X @Y nicht haben</description>
+        <cypher><![CDATA[
+             MATCH
+                (class:Type:Class),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(b:Annotation),
+                (class)-[:DECLARES]->(m:Method)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(anno:Type)
+            WHERE
+                b.fqn="library.annotations.B" AND
+                (anno.fqn="library.annotations.X" OR anno.fqn="library.annotations.Y")
+            RETURN
+                DISTINCT class  AS    Class
+        ]]></cypher>
+    </constraint>
+
+    <constraint id="my-rules:Rule5">
+        <description>Class @C dürfen @X @Y @Z nicht haben</description>
+        <cypher><![CDATA[
+             MATCH
+                (class:Type:Class),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(c:Annotation),
+                (class)-[:DECLARES]->(m:Method)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(anno:Type)
+            WHERE
+                c.fqn="library.annotations.C" AND
+                (anno.fqn="library.annotations.X" OR anno.fqn="library.annotations.Y" OR anno.fqn="library.annotations.Z")
+            RETURN
+                DISTINCT class  AS    Class
+        ]]></cypher>
+    </constraint>
+
+
+    <constraint id="my-rules:Attribute">
+        <description>Classes should not be have the Attribute with info = "HELLO"</description>
+        <cypher><![CDATA[
+             MATCH
+                (class:Type:Class),
+                (class)-[:ANNOTATED_BY]->()-[:OF_TYPE]->(attr:Annotation)
+                (c)-[:HAS]->(infoAttribute:Value),
+            WHERE
+                c.fqn="library.annotations.Attribute" AND
+                infoAttribute.info = 'HELLO'
+            RETURN
+                DISTINCT class  AS    Class
+        ]]></cypher>
+    </constraint>
+
 
 
     <group id="default">
-        <includeConstraint refId="my-rules:TestClassName"/>
-        <includeConstraint refId="example:ConstructorOfDateMustNotBeUsed"/>
+        <!--<includeConstraint refId="my-rules:Rule1"/>-->
+        <!--<includeConstraint refId="my-rules:Rule2"/>-->
+        <!--<includeConstraint refId="my-rules:Rule3"/>-->
+        <!--<includeConstraint refId="my-rules:Rule4"/>-->
+        <!--<includeConstraint refId="my-rules:Rule5"/>-->
+        <includeConstraint refID="my-rules:Attribute"></includeConstraint>
     </group>
 
 </jqa:jqassistant-rules>
