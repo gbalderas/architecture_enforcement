@@ -50,14 +50,14 @@ public class RecipeView implements FxmlView<RecipeViewModel>, Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         comboBox = new ComboBox<>();
-        System.out.println(comboBox.toString());
+//        System.out.println(comboBox.toString());
         recipe = new Recipe("a","b","c","d", new String[]{"a"});
         Object a = getMyList();
         Object b = getMyObjectList();
         ((List<Recipe>) b).add(recipe);
         ((List<Recipe>) a).size();
         recipe.getName();
-        System.out.println(((List<Recipe>) b).get(0));
+//        System.out.println(((List<Recipe>) b).get(0));
         ObservableList<Recipe> list = FXCollections.observableArrayList();
         list.forEach(System.out::println);
         comboBox.itemsProperty().setValue(list);

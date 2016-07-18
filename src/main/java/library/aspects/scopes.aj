@@ -1,68 +1,73 @@
 package library.aspects;
 
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Stack;
+
 /**
  * Created by gerardo.balderas on 13.07.2016.
  */
-public aspect scopes {
+public aspect Scopes {
 
-    Boolean isScopeProvider;
+    Boolean isScopeProviderValid = false;
 
-//    void around(): executionNewVM(){
-//        System.out.println("before execution to new VM");
-//        proceed();
-//        System.out.println("after execution new VM");
-//    }
+    Stack<String> viewModelStack = new Stack<>();
+    Stack<String> scopeProviderStack = new Stack<>();
 
-    //VIEWMODELS
-    pointcut initVM(): initialization(de.saxsys.mvvmfx.ViewModel+.new(..));
-    pointcut preInitVM(): preinitialization(de.saxsys.mvvmfx.ViewModel+.new(..));
-    pointcut staticInitVM(): staticinitialization(de.saxsys.mvvmfx.ViewModel+);
-    pointcut executionNewVM(): execution(de.saxsys.mvvmfx.ViewModel+.new(..));
-    pointcut withinVM(): within(de.saxsys.mvvmfx.ViewModel+);
-
-    //VIEWS
-    pointcut initView(): initialization(de.saxsys.mvvmfx.FxmlView+.new(..));
-    pointcut preInitView(): preinitialization(de.saxsys.mvvmfx.FxmlView+.new(..));
-    pointcut staticInitView(): staticinitialization(de.saxsys.mvvmfx.FxmlView+);
     pointcut executionNewView(): execution(de.saxsys.mvvmfx.FxmlView+.new(..));
-    pointcut execInitView(): execution(* de.saxsys.mvvmfx.FxmlView+.initialize(..));
-    pointcut withinView(): within(de.saxsys.mvvmfx.FxmlView+);
+    pointcut executionNewVM(Object vm): execution(de.saxsys.mvvmfx.ViewModel+.new(..)) && target(vm);
+    declare parents : (de.saxsys.mvvmfx.FxmlView+ && !de.saxsys.mvvmfx.FxmlView) implements library.aspects.InitImpl;
 
-    declare parents : library.views..*View implements javafx.fxml.Initializable;
+    after(Object vm): executionNewVM(vm){
+        Annotation[] annotations = vm.getClass().getAnnotations();
+        Arrays.stream(annotations)
+                .filter(a -> a.annotationType().getCanonicalName()
+                        .equals(de.saxsys.mvvmfx.ScopeProvider.class.getCanonicalName()))
+                .findAny()
+                .ifPresent(a -> {
+                    System.out.println("    ScopeProvider found!");
+                    isScopeProviderValid = true;
+                    scopeProviderStack.push(viewModelStack.peek());
+                });
+        Arrays.stream(vm.getClass().getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(de.saxsys.mvvmfx.InjectScope.class) && !isScopeProviderValid)
+                .findAny()
+                .ifPresent(a -> System.out.println("    SCOPE IS NOT VALID on " + viewModelStack.peek() + "!"));
+//                    try {
+//                        throw new Exception("Scope is not valid");
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
 
-    //    after(): initView(){
-//        System.out.println("after init " + thisJoinPoint.getSignature().toShortString());
-//    }
+//        for(Annotation a: annotations){
+//            if(a.annotationType().getCanonicalName().equals(de.saxsys.mvvmfx.ScopeProvider.class.getCanonicalName())){
+//                System.out.println("    ScopeProvider found!");
+//                isScopeProviderValid = true;
+//                scopeProviderStack.push(viewModelStack.peek());
+//            }
+//        }
 //
-//    before(): preInitView(){
-//        System.out.println("before preinit " + thisJoinPoint.getSignature().toShortString());
-//    }
+//        for(Field f : vm.getClass().getDeclaredFields()){
+//            if(f.isAnnotationPresent(de.saxsys.mvvmfx.InjectScope.class) && !isScopeProviderValid){
+//                    System.out.println("    SCOPE IS NOT VALID on " + viewModelStack.peek() + "!");
+//            }
+//        }
+    }
 
     after(): executionNewView(){
-        System.out.println("after View EXEC " + thisJoinPoint.getSignature().toShortString());
+        System.out.println("pushing: " + thisJoinPoint.getSignature().getDeclaringType().getCanonicalName());
+        viewModelStack.push(thisJoinPoint.getSignature().getDeclaringType().getCanonicalName());
     }
 
-//    void around(): staticInitView(){
-//        System.out.println("before static init " + thisJoinPoint.getSignature().toShortString());
-//        proceed();
-//        System.out.println("after static init " + thisJoinPoint.getSignature().toShortString());
-//    }
-
-    void around(): execInitView(){
-//        System.out.println("before exec " + thisJoinPoint.getSignature().toShortString());
-        proceed();
-        System.out.println("after EXEC " + thisJoinPoint.getSignature().toShortString());
+    after(javafx.fxml.Initializable initializable): execution(* initialize(..)) && this(initializable){
+        if (!scopeProviderStack.isEmpty()) {
+            if (scopeProviderStack.peek().equals(viewModelStack.peek())) {
+                System.out.println("    SCOPEPROVIDER ENDED " + scopeProviderStack.peek());
+                scopeProviderStack.pop();
+                isScopeProviderValid = false;
+            }
+        }
+        System.out.println("poping " + viewModelStack.pop());
     }
-
-
-
-//    after() returning: executionNewVM(){
-//        System.out.println("after returning exec "+ thisJoinPoint.getSignature().toShortString());
-//    }
-//
-//    after(): initNewVM(){
-//        System.out.println("hello its me: "+thisJoinPointStaticPart.getSignature().toShortString());
-//    }
-
 
 }
